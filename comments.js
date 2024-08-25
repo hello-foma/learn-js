@@ -43,6 +43,7 @@ export function Comments(comments, pages) {
         author: user,
         id: commentCount,
         replyTo: id,
+        userName: user.name
       });
       commentCount++;
       return comments[comments.length - 1]} else { return false };

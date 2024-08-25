@@ -91,7 +91,12 @@ export function App() {
     this.comments = new Comments(comments, pages);
     this.leaveComment = (pageName, text, time, user) => this.comments.addComment(pageName, text, time, user);
     this.deleteComment = (commentId) => this.comments.deleteComment(commentId);
-    this.replyToComment = (commentId, time, user, text) => this.comments.reply(commentId, time, user, text);
+    this.replyToComment = (commentId, text) => {
+        const time = Date.now();
+        const user = this.auth.getCurrentUser();
+        
+        return this.comments.reply(commentId, time, user, text)
+    };
   };
 
   App.actions = {
