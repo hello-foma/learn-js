@@ -48,4 +48,8 @@ export function Comments(comments, pages) {
       commentCount++;
       return comments[comments.length - 1]} else { return false };
     };
+
+    this.getPageComments = (pageName) => {
+      return comments.filter((comment) => comment.page === pageName);
+    }
   }

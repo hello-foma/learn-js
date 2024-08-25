@@ -86,7 +86,20 @@ export function App() {
     this.pages = new Pages(pages);
     this.createPage = (pageName, title, text) => this.pages.createPage(pageName, title, text);
     this.editPage = (pageName, title, text) => this.pages.editPage(pageName, title, text);
-    this.readPage = (pageName) => this.pages.readPage(pageName);
+    this.readPage = (pageName) => {
+        const page = this.pages.readPage(pageName);
+        
+        if (typeof page !== 'object') {
+            return 'Unknown page';
+        }
+
+        const comments = this.comments.getPageComments(pageName);
+
+        return {
+            page,
+            comments
+        }
+    };
     
     this.comments = new Comments(comments, pages);
     this.leaveComment = (pageName, text, time, user) => this.comments.addComment(pageName, text, time, user);
@@ -94,7 +107,7 @@ export function App() {
     this.replyToComment = (commentId, text) => {
         const time = Date.now();
         const user = this.auth.getCurrentUser();
-        
+
         return this.comments.reply(commentId, time, user, text)
     };
   };
