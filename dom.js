@@ -1,3 +1,4 @@
+// enum
 export const ElementId = {
     menu: 'menu',
     pagesLink: 'pages-link',
@@ -35,7 +36,7 @@ export const onClick = (elemId, fn) => {
 export const setUsername = (username) => {
     const usernameElem = getElemById(ElementId.username);
 
-    usernameElem.textContent = text;
+    usernameElem.textContent = username;
 }
 
 export const getLoginInput = () => {
@@ -44,6 +45,10 @@ export const getLoginInput = () => {
     return loginInputElem.value;
 }
 
+/**
+ * Update title text for current page DOM element
+ * @param {*} text 
+ */
 export const setTitle = (text) => {
     const titleElem = getElemById(ElementId.pageTitle);
 
