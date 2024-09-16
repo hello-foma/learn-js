@@ -7,24 +7,43 @@
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-  <ul id="menu">
-    <li id="pages-link">Pages</li>
-    <li id="login-link">Login</li>
-    <li id="username"></li>
-    <li id="logout-link">Logout</li>
-  </ul>
+  <header>
+  <a href="index.html">
+    <img id="logo" src="images/pngwing.com.png"/>
+  </a>
+  <h1>Hogwarts School of Witchcraft and Wizardry</h1>
+  <div id="authorization-block">
+    <ul id="menu">
+      <li id="pages-link">Pages</li>
+      <li id="login-link">Login</li>
+      <li> 
+        <span id="logout-link">Logout</span>
+        <span id="username"></span>
+      </li>
+    </ul>
   
-  <div id="login-page">
-    <input type="text" id="login-input" placeholder="username">
-    <button id="login-button">Login</button>
+    <div id="login-page">
+      <p id="error-message">Введите логин!</p>
+      <div id="authorization-form">
+        <input type="text" id="login-input" placeholder="username">
+        <button id="login-button">Login</button>
+      </div>
+    </div>
   </div>
+  </header>
+<main>
   <div id="pages">
     <ul id="pages__list"></ul>
   </div>
   <div id="page">
-    <h1 id="page__title"></h1>
-    <h1 id="page__content"></h1>
+    <h2 id="page__title"></h2>
+    <p id="page__content"></p>
   </div>
+  <p id="back-to-pages_List">Back to pages</p>
+</main>
+<footer>
+  
+</footer>
   <script type="module" src="index.js"></script>
 </body>
 </html>

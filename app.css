@@ -1,3 +1,96 @@
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+body {
+    /* max-width: 1200px; */
+    min-width: 600px;
+    height: 100vh;
+    font-size: 20px;
+
+}
+
+header {
+    display: flex;
+    justify-content:space-between;
+    background-color: black;
+    height: 120px;
+    color: white;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    font-size: 20px;
+}
+
+h1 {
+    font-style: italic;
+    margin-top: 0px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 30px;
+}
+
+main {
+  background-image: url("images/Hogwarts-PNG-HD-Image.png");
+  background-size: cover;  
+  background-position: center; 
+  background-repeat: no-repeat; 
+  min-height: 100vh; 
+  padding: 20px; 
+}
+
+ul {
+    margin: 0px;
+    list-style-type: none;
+    padding: 0px;
+}
+
+#pages-link, #login-link, #logout-link, #pages__list, #back-to-pages_List {
+    cursor: pointer;
+}
+
+#login-page, #authorization-block, #authorization-form  {
+    display: flex;
+}
+
+#authorization-block {
+    height: fit-content;
+    align-items: flex-end;
+}
+
+#login-page {
+    flex-direction: column;
+}
+
+#menu {
+    margin-bottom: 0px;
+}
+
+input, button, #username, #error-message {
+    margin-left: 10px;
+}
+
+#logo {
+    width: 80px;
+    height: 80px;
+    filter: grayscale(90%);
+}
+
+
+#error-message {
+    color: red;
+    margin-left: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#page {
+    padding-left: 10px;
+}
+
+#back-to-pages_List {
+    margin-top:40px;
+    padding-left: 10px;
+    position: absolute;
+    bottom: 0; 
 }

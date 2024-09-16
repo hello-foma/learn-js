@@ -10,8 +10,10 @@ export const ElementId = {
     pages: 'pages',
     pagesList: 'pages__list',
     page: 'page',
-    pageTitle: 'pageTitle',
-    pageContent: 'pageContent',
+    pageTitle: 'page__title',
+    pageContent: 'page__content',
+    errorMessage: 'error-message',
+    backToPagesList: 'back-to-pages_List',
 };
 
 export const toggleElem = (elem, isShow) => {
@@ -35,7 +37,7 @@ export const onClick = (elemId, fn) => {
 export const setUsername = (username) => {
     const usernameElem = getElemById(ElementId.username);
 
-    usernameElem.textContent = text;
+    usernameElem.textContent = `/\u00A0${username}`;
 }
 
 export const getLoginInput = () => {
@@ -51,9 +53,9 @@ export const setTitle = (text) => {
 }
 
 export const setContent = (text) => {
-    const titleElem = getElemById(ElementId.pageTitle);
+    const contentElem = getElemById(ElementId.pageContent);
 
-    titleElem.textContent = text;
+    contentElem.textContent = text;
 }
 
 export const updatePageList = (pages, goToPage) => {
