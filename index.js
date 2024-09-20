@@ -153,7 +153,6 @@ import { ElementId, getElemById, getLoginInput, onClick, setContent, setTitle, s
     } else {
         console.error('Страница не найдена:', pageName);
     }
-
   }
 
   // init app interface
