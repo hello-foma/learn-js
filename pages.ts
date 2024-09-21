@@ -2,16 +2,16 @@ export type Page = {
     pageName: string; 
     title: string; 
     text: string;
-    comments: Comments[];
+    comments: Comment[];
 };
 
-export type Comments = {
+export type Comment = {
     page: string;
     text: string;
     time: number;
     author: string;
     id: number;
-    replyTo?: number | null;
+    replyTo: number | null;
     userName?: string;
 };
 
@@ -22,9 +22,9 @@ export type PagePreview = {
 };
 
 export class Pages {
-  private pages: Page;
+  private pages: Page[];
   
-  constructor(pages: Page) {
+  constructor(pages: Page[]) {
     this.pages = pages;
   }
 
@@ -36,28 +36,29 @@ export class Pages {
     delete this.pages[pageName];
     return this.pages[pageName] === undefined;
   }
-  editPage(pageName: string, title: string, text: string): Page | string {
+  editPage(pageName: string, title: string, text: string): Page {
     if (this.pages[pageName]) {
       return (this.pages[pageName] = { pageName, title, text, comments: [] });
     } else {
-      return "Page undefined";
+      throw new Error("Page undefined");
     }
   }
 
-  readPage(pageName: string): Page | string {
-    return this.pages[pageName] ? this.pages[pageName] : "Page undefined";
+  readPage(pageName: string): Page {
+    if (this.pages[pageName]) {
+      return this.pages[pageName];
+    } else {
+      throw new Error("Page undefined");
+    } 
   }
 
   listPages(): PagePreview[] {
-    let listOfPages: PagePreview[] = Object.values(this.pages).map(i => {
-      const page = i as unknown as Page;
-      return {
-      pageName: page.pageName,
-      title: page.title,
-      text: page.text ? `${page.text.slice(0, 15)}...` : "",
-      }
-    });
-
+    let listOfPages: PagePreview[] = Object.values(this.pages).map(i => ({
+      pageName: i.pageName,
+      title: i.title,
+      text: i.text ? `${i.text.slice(0, 15)}...` : "",
+    })
+  )
     return listOfPages;
   }
 }
