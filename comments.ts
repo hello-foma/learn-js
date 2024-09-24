@@ -1,5 +1,4 @@
 import { PagesList } from "./pages";
-import { User } from "./users";
 
 export type Comment = {
     page: string;
@@ -8,7 +7,6 @@ export type Comment = {
     author: string;
     id: number;
     replyTo: number | null;
-    // userName: string | null; 
 };
 
 let commentCount = 0;
@@ -22,7 +20,7 @@ export class Comments {
         this.pages = pages;
     }
     
-    addComment(pageName: string, text: string, time: number, user: string) {
+    addComment(pageName: string, text: string, time: number, user: string): Comment {
       this.comments.push({
         page: pageName,
         text,
@@ -30,19 +28,18 @@ export class Comments {
         author: user,
         id: commentCount,
         replyTo: null,
-        // userName: null,
       });
       this.pages[pageName] = {
         pageName: this.pages[pageName].pageName,
         title: this.pages[pageName].title,
         text: this.pages[pageName].text,
-        comments: [...this.pages[pageName].comments, {author: comments.author, text: comments[comments.length - 1].text} ],
+        comments: [...this.pages[pageName].comments],
       };
       commentCount++;
       return this.comments[this.comments.length - 1];
     }
   
-    deleteComment(id: number) {
+    deleteComment(id: number): boolean {
       let commentIndex = this.comments.findIndex(
         (comment) => comment.id === id
       );
@@ -52,7 +49,7 @@ export class Comments {
       );
     }
   
-    reply(id: number, time: number, user: string, text: string) {
+    reply(id: number, time: number, user: string, text: string): Comment | boolean {
       let comment = this.comments.find((i) => i.id === id);
       if (comment) {
       this.comments.push({
@@ -62,13 +59,12 @@ export class Comments {
         author: user,
         id: commentCount,
         replyTo: id,
-        // userName: user.name
       });
       commentCount++;
       return this.comments[this.comments.length - 1]} else { return false };
     }
 
-    getPageComments(pageName: string) {
+    getPageComments(pageName: string): Comment[] {
       return this.comments.filter((comment) => comment.page === pageName);
     }
   }
