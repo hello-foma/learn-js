@@ -1,18 +1,10 @@
+import { Comment } from "./comments";
+
 export type Page = {
     pageName: string; 
     title: string; 
     text: string;
     comments: Comment[];
-};
-
-export type Comment = {
-    page: string;
-    text: string;
-    time: number;
-    author: string;
-    id: number;
-    replyTo: number | null;
-    userName?: string;
 };
 
 export type PagePreview = {
@@ -21,30 +13,51 @@ export type PagePreview = {
     text: string;
 };
 
+export type PagesList = {
+  [pageName: string]: Page
+}
+
+
 export class Pages {
-  private pages: Page[];
+  private comments: Comment[];
+
+  public getPages(): PagesList {
+    return this.pages;
+  }
   
-  constructor(pages: Page[]) {
-    this.pages = pages;
+  constructor(
+    private pages: PagesList,
+    public isReadOnly: boolean,
+    comments: Comment[],
+  ) {
+    this.comments = comments.filter( () => true);
   }
 
-  createPage(pageName: string, title: string, text: string): Page {
+  public updatePageComments(pageName: string, comment: Comment[]) {
+    this.pages[pageName].comments = comment;
+  }
+
+  private createPage(pageName: string, title: string, text: string): Page {
     return (this.pages[pageName] = { pageName, title, text, comments: [] });
   }
 
-  removePage(pageName: string): boolean {
+  private removePage(pageName: string): boolean {
     delete this.pages[pageName];
     return this.pages[pageName] === undefined;
   }
-  editPage(pageName: string, title: string, text: string): Page {
-    if (this.pages[pageName]) {
-      return (this.pages[pageName] = { pageName, title, text, comments: [] });
+
+  private editPage(pageName: string, title: string, text: string): Page {
+    const isPageExist = typeof this.pages[pageName] !== 'undefined';
+    const page = this.pages[pageName];
+    
+    if (isPageExist) {
+      return (this.pages[pageName] = { ...page, pageName, title, text });
     } else {
       throw new Error("Page undefined");
     }
   }
 
-  readPage(pageName: string): Page {
+  private readPage(pageName: string): Page {
     if (this.pages[pageName]) {
       return this.pages[pageName];
     } else {
@@ -52,13 +65,17 @@ export class Pages {
     } 
   }
 
-  listPages(): PagePreview[] {
-    let listOfPages: PagePreview[] = Object.values(this.pages).map(i => ({
+  private listPages(): PagePreview[] {
+    const listOfPages: Page[] = Object.values(this.pages);
+
+    const listOfPreviews: PagePreview[] = listOfPages.map(i => ({
       pageName: i.pageName,
       title: i.title,
       text: i.text ? `${i.text.slice(0, 15)}...` : "",
     })
   )
-    return listOfPages;
+    return listOfPreviews;
   }
 }
+export { Comment };
+
