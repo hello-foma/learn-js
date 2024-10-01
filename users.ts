@@ -37,11 +37,17 @@ export class Users {
     getUserName (login: string): string {
       return this.users[login] ? this.users[login].name : "User undefined";
     }
+
+    private getUserComments(login: string): Comment[] {
+      let cutComments = this.comments.filter((comment) => comment.author === login);
+
+      return cutComments;
+    }
   
     banUser (login: string): string {
       if (this.users[login]) {
         this.users[login] = { role: "banned", name: this.users[login].name };
-        let cutComments = this.comments.filter((comment) => comment.author === login);
+        let cutComments = this.getUserComments(login);
         let cutCommentsId = cutComments.map(i => i.id); 
         for (let cutCommentId of cutCommentsId) {
           this.comments = this.comments.filter(

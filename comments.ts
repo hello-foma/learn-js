@@ -9,11 +9,10 @@ export type Comment = {
     replyTo: number | null;
 };
 
-let commentCount = 0;
-
 export class Comments {
     private comments: Comment[];
     private pages: PagesList;
+    private commentCount = 0;
 
     constructor(comments: Comment[], pages: PagesList) {
         this.comments = comments;
@@ -26,7 +25,7 @@ export class Comments {
         text,
         time,
         author: user,
-        id: commentCount,
+        id: this.commentCount,
         replyTo: null,
       });
       this.pages[pageName] = {
@@ -35,7 +34,7 @@ export class Comments {
         text: this.pages[pageName].text,
         comments: [...this.pages[pageName].comments],
       };
-      commentCount++;
+      this.commentCount++;
       return this.comments[this.comments.length - 1];
     }
   
@@ -57,10 +56,10 @@ export class Comments {
         text,
         time,
         author: user,
-        id: commentCount,
+        id: this.commentCount,
         replyTo: id,
       });
-      commentCount++;
+      this.commentCount++;
       return this.comments[this.comments.length - 1]} else { return false };
     }
 
