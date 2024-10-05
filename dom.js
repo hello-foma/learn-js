@@ -1,3 +1,4 @@
+// enum
 export const ElementId = {
     menu: 'menu',
     pagesLink: 'pages-link',
@@ -64,7 +65,7 @@ export const onClick = (elemId, fn) => {
 export const setUsername = (text) => {
     const usernameElem = getElemById(ElementId.username);
 
-    usernameElem.textContent = text;
+    usernameElem.textContent = username;
 }
 
 /**

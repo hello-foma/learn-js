@@ -1,6 +1,6 @@
 // Общий блок
 import { App } from './app.js';
-import { ElementId, getElemById, getLoginInput, onClick, toggleElem, updatePageList } from './dom.js';
+import { ElementId, getElemById, getLoginInput, onClick, toggleElem, updatePageList, setUsername } from './dom.js';
   
   const app = new App();
 
@@ -43,8 +43,14 @@ import { ElementId, getElemById, getLoginInput, onClick, toggleElem, updatePageL
 
     onClick(ElementId.loginButton, () => {
       const userLogin = getLoginInput();
+
+      console.info(userLogin);
+
+      setUsername(userLogin);
+
+
       // TODO: authorise user here
-    })
+    });
 
     // TODO: add click event for other navigation buttons
   }
@@ -60,5 +66,8 @@ import { ElementId, getElemById, getLoginInput, onClick, toggleElem, updatePageL
 
 
   // init app content
-  app.createPage('home', 'Home page', 'text of home page');
+  app.createPage(33);
+  app.createPage('Home page', 'text of home page');
+  app.createPage('contact', 'Contacts', 'You can contact us by owl mail');
+
   updatePageList(app.pages.listPages(), navigateToPage);
