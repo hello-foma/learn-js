@@ -75,4 +75,8 @@ export function Authorisation(users) {
     this.getUserName = function () {
       return currentUser ? currentUser.name : "User";
     };
+
+    this.getCurrentUser = () => {
+      return currentUser;
+    }
   }

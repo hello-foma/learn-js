@@ -1,202 +1,165 @@
 // Общий блок
-import {Comments} from './comments.js';
-import {Pages} from './pages.js';
-import {Users} from './users.js';
-import {Authorisation} from './authorisation.js';
-
-
-let pages = {};
-let comments = [];
-
-function App() {
-    const roles = {
-      admin: {
-        permissions: {
-          all: true,
-        },
-      },
-      editor: {
-        permissions: {
-          edit: true,
-          post: true,
-        },
-      },
-      user: {
-        permissions: {
-          view: true,
-          comment: true,
-        },
-      },
-      visitor: {
-        permissions: {
-          view: true,
-        },
-      },
-      banned: {
-        permissions: null,
-      },
-      guest: {
-        view: true,
-      },
-    };
-  
-    const users = {
-      albus: {
-        role: "admin",
-        name: "Albus Dumbledore",
-      },
-      harry: {
-        role: "editor",
-        name: "Harry Potter",
-      },
-      ron: {
-        role: "user",
-        name: "Ronald Weasley",
-      },
-      hagrid: {
-        role: "visitor",
-        name: "Rubeus Hagrid",
-      },
-      tom: {
-        role: "banned",
-        name: "Tom Riddle",
-      },
-    };
-  
-    function getPageContent(pageName) {
-      return `${pageName} content.`;
-    }
-  
-    this.viewPage = function (pageName) {
-      if (this.auth.isHaveAccess(App.actions.readPage)) {
-        // поправила view на read
-        return getPageContent(pageName);
-      }
-  
-      return "You dont't have an access to this page!";
-    };
-  
-    this.auth = new Authorisation(users); // убрала roles
-    this.login = (userName) => this.auth.login(userName);
-    this.logout = () => this.auth.logout();
-  
-    this.users = new Users(users);
-    this.createUser = (login, userName, role) =>
-      this.users.createUser(login, userName, role);
-    this.banUser = (login) => this.users.banUser(login);
-    
-    this.pages = new Pages(pages);
-    this.createPage = (pageName, title, text) => this.pages.createPage(pageName, title, text);
-    this.editPage = (pageName, title, text) => this.pages.editPage(pageName, title, text);
-    this.readPage = (pageName) => this.pages.readPage(pageName);
-    
-    this.comments = new Comments(comments, pages);
-    this.leaveComment = (pageName, text, time, user) => this.comments.addComment(pageName, text, time, user);
-    this.deleteComment = (commentId) => this.comments.deleteComment(commentId);
-    this.replyToComment = (commentId, time, user, text) => this.comments.reply(commentId, time, user, text);
-  };
-
-  App.actions = {
-    createPage: "createPage",
-    deletePage: "deletePage",
-    readPage: "readPage",
-    editPage: "editPage",
-    addComment: "addComment",
-  };
-    
+import { App } from './app.js';
+import { ElementId, getElemById, getLoginInput, onClick, setContent, setTitle, setUsername, toggleElem, updatePageList } from './dom.js';
   
   const app = new App();
-  
-  
-  // tests
-  console.log("2-0", app.login("albus") === true);
-  console.log(
-    "2-1",
-    app.createUser("dobby", "Dobby the Elf", "visitor") === true
-  );
-  console.log("2-2", app.users.getUserName("dobby") === "Dobby the Elf");
- 
- // добавила в аргументы "visitor", поскольку функция updateUser предполагает наличие данного аргумента
-  console.log(
-    "2-3",
-    app.users.updateUser("dobby", "Dobby Unchained", "visitor").role === "visitor"
-  );
-  console.log("2-4", app.users.getUserName("dobby") === "Dobby Unchained");
-  console.log(
-    "2-5",
-    app.createPage(
-      "home",
-      "Welcome to our School!",
-      "We are happy to invite you to the sorcery and magic school Hogwarts!"
-    ).pageName === "home"
-  );
 
-  // поправила content на text (поскольку у page нет свойства content)
-  console.log(
-    "2-6",
-    app.readPage("home").text ===
-      "We are happy to invite you to the sorcery and magic school Hogwarts!"
-  );
-  
-  // добавила в аргументы text, поскольку функция editPage предполагает наличие данного аргумента
-  console.log(
-    "2-7",
-    app.editPage("home", "Welcome to Hogwarts!", "We are happy to invite you to the sorcery and magic school Hogwarts!").title === "Welcome to Hogwarts!"
-  );
-  app.createPage(
-    "careers",
-    "List of open positions",
-    "We are looking for new professor of Defence Against the Dark Arts"
-  );
+  const NavigationPage = {
+    page: 'page',
+    login: 'login',
+    pageList: 'pageList'
+  }
 
-  // поправила проверочный текст на "We are happy to"
-  console.log(
-    "2-8",
-    app.pages.listPages()[0].text === "We are happy to"
-  );
-  console.log("2-9", app.pages.listPages()[1].pageName === "careers");
-  app.logout();
-  console.log("2-10", app.login("dobby") === true);
+  // Отображение элементов на стартовой странице
+  const loginLinkElem = getElemById(ElementId.loginLink);
+  const loginInputElem = getElemById(ElementId.loginInput);
+  const loginButtonElem = getElemById(ElementId.loginButton);
+  const logoutLinkElem = getElemById(ElementId.logoutLink);
+  const errorMessageElem = getElemById(ElementId.errorMessage);
+  const usernameElem = getElemById(ElementId.username);
+  const pagesElem = getElemById(ElementId.pages);
+  const pagesListElem = getElemById(ElementId.pagesList);
+  const backToPagesListElem = getElemById(ElementId.backToPagesList);
+  const pageTitleElem = getElemById(ElementId.pageTitle);
+  const pageContentElem = getElemById(ElementId.pageContent);
+  toggleElem(loginInputElem, false);
+  toggleElem(loginButtonElem, false);
+  toggleElem(logoutLinkElem, false);
+  toggleElem(errorMessageElem, false);
+  toggleElem(usernameElem, false);
+  toggleElem(pagesElem, false);
+  toggleElem(pagesListElem, false);
+  toggleElem(backToPagesListElem, false);
+  toggleElem(pageTitleElem, true);
+  toggleElem(pageContentElem, true);
+
+
+  const navigate = (page) => {
+    const loginPageElem = getElemById(ElementId.loginPage);
+    const pageElem = getElemById(ElementId.page);
+    const pageListElem = getElemById(ElementId.pagesList);
+
+    toggleElem(loginPageElem, false);
+    toggleElem(pageElem, false);
+    toggleElem(pageListElem, false);
+
+    switch (page) {
+      case NavigationPage.login:
+        toggleElem(loginPageElem, true);
+        break;
+      case NavigationPage.page:
+        toggleElem(pageElem, true);
+        break;
+      case NavigationPage.pageList:
+        toggleElem(pageListElem, true);
+        break;
+    }
+  }
+
+  const goToLoginPage = () => {
+    navigate(NavigationPage.login);
+  }
   
-  // поправила content на text (поскольку у comment нет свойства content). Здесь не хватает аргументов (pageName, text, time, user)?
-  console.log(
-    "2-11",
-    app.leaveComment("home", "I live here").text === "I live here"
-  );
-  const commentId = app.leaveComment("careers", "Where to send my CV?").id;
-  console.log("2-12", typeof commentId === "number");
-  console.log("2-13", app.readPage("careers").comments.length === 1);
-  app.logout();
-  app.login("harry");
-  console.log(
-    "2-14",
-    app.replyToComment(commentId, "Great! One more prof that wants to kill me...")
-      .userName === "Harry Potter"
-  );
-  console.log("2-15", app.readPage("careers").comments.length === 2);
+  const goToPageList = () => {
+    navigate(NavigationPage.pageList);
+  }
+
+  const resetInputState = () => {
+      getElemById(ElementId.loginInput).value = null;
+      toggleElem(errorMessageElem, false);
+  }
+
+  const initButtons = () => {
+    onClick(ElementId.loginLink, () => {
+      goToLoginPage();
+      toggleElem(loginInputElem, true);
+      toggleElem(loginButtonElem, true);
+    });
+
+    onClick(ElementId.loginButton, () => {
+      const userLogin = getLoginInput();
+      // if login is not empty
+      if (userLogin) {
+      setUsername(userLogin);
+
+      resetInputState();
+
+      // hide login page
+      toggleElem(loginLinkElem, false);
+      toggleElem(loginInputElem, false);
+      toggleElem(loginButtonElem, false);
+
+      //show username
+      toggleElem(usernameElem, true)
+
+      // show logout
+      toggleElem(logoutLinkElem, true);
+      } else {
+        toggleElem(errorMessageElem, true);
+      }
+    })
+
+    onClick(ElementId.logoutLink, () => {
+      goToLoginPage();
+      getElemById(ElementId.username).textContent = null;
+      toggleElem(loginLinkElem, true);
+      toggleElem(loginInputElem, false);
+      toggleElem(loginButtonElem, false);
+      toggleElem(usernameElem, false)
+      toggleElem(logoutLinkElem, false);
+    })
+
+    onClick(ElementId.pagesLink, () => {
+      toggleElem(pagesElem, true);
+      toggleElem(pagesListElem, true);
+      // goToPageList();
+      toggleElem(pageTitleElem, false);
+      toggleElem(pageContentElem, false);
+      toggleElem(backToPagesListElem, false);
+    })
+
+    onClick(ElementId.backToPagesList, () => {
+      toggleElem(backToPagesListElem, false);
+      toggleElem(pageTitleElem, false);
+      toggleElem(pageContentElem, false);
+
+      toggleElem(pagesListElem, true);
+
+
+      // goToPageList();
+    })
+
+  }
+
+  const navigateToPage = (pageName) => {
+    // todo: implement navigation
+
+    console.log(pageName);
+   
+    const pageData = app.readPage(pageName);
+    const page = pageData.page;
   
-  // поправила content на text (поскольку у comment нет свойства content)
-  console.log(
-    "2-16",
-    app.readPage("careers").comments[1].text ===
-      "Reply to Dobby Unchained:<br>Great! One more prof that wants to kill me..."
-  );
-  const commentToDeleteId = app.leaveComment("home", "Love this place");
-  console.log("2-17", app.readPage("home").comments.length === 2);
-  console.log("2-18", app.deleteComment(commentToDeleteId) === true);
-  console.log("2-19", app.readPage("home").comments.length === 1);
-  console.log("2-20", app.deleteComment(commentId) === false);
-  console.log("2-21", app.readPage("careers").comments.length === 2);
-  console.log(
-    "2-22",
-    app.createUser("larry", "Larry Dotter", "visitor") === false
-  );
-  app.logout();
-  app.login("albus");
-  console.log("2-23", app.banUser("dobby") === true);
-  console.log("2-24", app.readPage("careers").comments.length === 1);
-  console.log(
-    "2-25",
-    app.readPage("careers").comments[0].content ===
-      "Reply to Dobby Unchained:<br>Great! One more prof that wants to kill me..."
-  );
+
+    if (page) {
+        // Обновляем заголовок и контент страницы
+        setTitle(page.title);   // Функция для установки заголовка
+        setContent(page.text);  // Функция для установки текста страницы
+
+        // Переход к отображению страницы
+        navigate(NavigationPage.page);
+        toggleElem(pageTitleElem, true);
+        toggleElem(pageContentElem, true);
+        toggleElem(backToPagesListElem, true);
+    } else {
+        console.error('Страница не найдена:', pageName);
+    }
+  }
+
+  // init app interface
+  initButtons();
+
+
+  // init app content
+  app.createPage('Home', 'Home page', 'text of home page');
+  app.createPage('Griffindor', 'Griffindor page', 'text of griffindor page');
+  updatePageList(app.pages.listPages(), navigateToPage);
