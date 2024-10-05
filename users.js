@@ -1,4 +1,6 @@
 export function Users(users) {
+  const comments = [];
+  
     this.createUser = function (login, userName, role) {
       users[login] = { role: role, name: userName };
       return users[login] !== undefined;

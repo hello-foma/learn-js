@@ -31,6 +31,11 @@ export const toggleElem = (elem, isShow) => {
  * @returns HTMLElement | null
  */
 export const getElemById = (id) => {
+        // if we run in node.js
+        if (typeof document !== 'object') {
+            return;
+        }
+
     return document.getElementById(id);
 }
 
@@ -40,6 +45,11 @@ export const getElemById = (id) => {
  * @param {*} fn callback funciton to run on click
  */
 export const onClick = (elemId, fn) => {
+    // if we run in node.js
+    if (typeof document !== 'object') {
+        return;
+    }
+
     document.addEventListener('click', (event) => {
         if (event.target.id === elemId) {
             fn();
@@ -93,6 +103,11 @@ export const setContent = (text) => {
  * @param {function} goToPage callback function that will be called on page preview click
  */
 export const updatePageList = (pages, goToPage) => {
+        // if we run in node.js
+        if (typeof document !== 'object') {
+            return;
+        }
+        
     const listElem = getElemById(ElementId.pagesList);
 
     listElem.innerHtml = '';
