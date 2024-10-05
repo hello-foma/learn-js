@@ -29,7 +29,7 @@ export function Pages(pages) {
         listOfPages[i] = {
           pageName: listOfPages[i].pageName,
           title: listOfPages[i].title,
-          text: listOfPages[i].text ? listOfPages[i].text.slice(0, 15) : "",
+          text: listOfPages[i].text ? `${listOfPages[i].text.slice(0, 15)}...` : "",
         };
       }
       return listOfPages;
