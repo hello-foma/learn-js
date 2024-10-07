@@ -8,12 +8,12 @@ describe('pages.ts', () => {
     });
 
     describe('getPages', () => {
+        
         test('Should return empty list if no pages', () => {
             expect(pages.getPages()).toEqual({});
         })
-    });
 
-    test('Should return pages if they are exist', () => {
+        test('Should return pages if they are exist', () => {
         // set pages
         const expectedPages: PagesList = {'testPage': {
             title: 'Test page title',
@@ -25,9 +25,9 @@ describe('pages.ts', () => {
         
 
         expect(pages.getPages()).toEqual(expectedPages);
-    })
+        })
 
-    test('Returned pages should be protected from edit', () => {
+        test('Returned pages should be protected from edit', () => {
         // set pages
         const pagesList: PagesList = {};
         let pages = new Pages(pagesList, []);
@@ -42,5 +42,21 @@ describe('pages.ts', () => {
         expect(pagesList).toEqual({});
         expect(pagesAfterUpdate).toEqual({});
         expect(pagesToUpdate).toEqual({'newPage': {}});
+        })
+    });
+
+    test('Should delete page and return undefined', () => {
+        // set pages
+        const pageToDelete: PagesList = {'testPage': {
+            title: 'Test page title',
+             comments: [],
+              pageName: 'testPage',
+              text: 'Text page content'
+            }}
+        let pages = new Pages(pageToDelete, []);
+        
+        expect(pages.removePage('testPage')).toBe(true);
+        expect(() => pages.readPage('testPage')).toThrow();
     })
+
 });
