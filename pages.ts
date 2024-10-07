@@ -22,12 +22,11 @@ export class Pages {
   private comments: Comment[];
 
   public getPages(): PagesList {
-    return this.pages;
+    return {...this.pages};
   }
   
   constructor(
     private pages: PagesList,
-    public isReadOnly: boolean,
     comments: Comment[],
   ) {
     this.comments = comments.filter( () => true);
