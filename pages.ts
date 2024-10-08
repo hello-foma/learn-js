@@ -29,7 +29,7 @@ export class Pages {
     private pages: PagesList,
     comments: Comment[],
   ) {
-    this.comments = comments.filter( () => true);
+    this.comments = comments;
   }
 
   public updatePageComments(pageName: string, comment: Comment[]) {
