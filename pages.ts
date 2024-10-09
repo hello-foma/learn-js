@@ -29,23 +29,23 @@ export class Pages {
     private pages: PagesList,
     comments: Comment[],
   ) {
-    this.comments = comments.filter( () => true);
+    this.comments = comments;
   }
 
   public updatePageComments(pageName: string, comment: Comment[]) {
     this.pages[pageName].comments = comment;
   }
 
-  private createPage(pageName: string, title: string, text: string): Page {
+  public createPage(pageName: string, title: string, text: string): Page {
     return (this.pages[pageName] = { pageName, title, text, comments: [] });
   }
 
-  private removePage(pageName: string): boolean {
+  public removePage(pageName: string): boolean {
     delete this.pages[pageName];
     return this.pages[pageName] === undefined;
   }
 
-  private editPage(pageName: string, title: string, text: string): Page {
+  public editPage(pageName: string, title: string, text: string): Page {
     const isPageExist = typeof this.pages[pageName] !== 'undefined';
     const page = this.pages[pageName];
     
@@ -56,7 +56,7 @@ export class Pages {
     }
   }
 
-  private readPage(pageName: string): Page {
+  public readPage(pageName: string): Page {
     if (this.pages[pageName]) {
       return this.pages[pageName];
     } else {
@@ -64,7 +64,7 @@ export class Pages {
     } 
   }
 
-  private listPages(): PagePreview[] {
+  public listPages(): PagePreview[] {
     const listOfPages: Page[] = Object.values(this.pages);
 
     const listOfPreviews: PagePreview[] = listOfPages.map(i => ({
