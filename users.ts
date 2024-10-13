@@ -1,9 +1,9 @@
-import { Comment } from "./comments";
+import { RoleName } from "./roles";
 
 export type User = { 
     name: string;
-    role: string;
-    }
+    role: RoleName;
+    } 
 
 export type UsersList = {
     [login: string]: User
@@ -13,14 +13,12 @@ export type UsersList = {
 export class Users {
 
     private users: UsersList;
-    private comments: Comment[];
 
-    constructor(users: UsersList, comments: Comment[]) {
+    constructor(users: UsersList) {
         this.users = users;
-        this.comments = comments;
     }
 
-    createUser (login: string, userName: string, role: string): boolean {
+    createUser (login: string, userName: string, role: RoleName): boolean {
       this.users[login] = { role: role, name: userName };
       return this.users[login] !== undefined;
     }
@@ -37,24 +35,10 @@ export class Users {
     getUserName (login: string): string {
       return this.users[login] ? this.users[login].name : "User undefined";
     }
-
-    private getUserComments(login: string): Comment[] {
-      let cutComments = this.comments.filter((comment) => comment.author === login);
-
-      return cutComments;
-    }
   
     banUser (login: string): string {
       if (this.users[login]) {
         this.users[login] = { role: "banned", name: this.users[login].name };
-        let cutComments = this.getUserComments(login);
-        let cutCommentsId = cutComments.map(i => i.id); 
-        for (let cutCommentId of cutCommentsId) {
-          this.comments = this.comments.filter(
-            (comment) => comment.replyTo !== cutCommentId
-          );
-        }
-        this.comments = this.comments.filter((comment) => comment.author !== login);
         return login + " was banned";
       } else {
         return "User undefined";

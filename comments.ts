@@ -1,5 +1,3 @@
-import { PagesList } from "./pages";
-
 export type Comment = {
     page: string;
     text: string;
@@ -11,12 +9,10 @@ export type Comment = {
 
 export class Comments {
     private comments: Comment[];
-    private pages: PagesList;
     private commentCount = 0;
 
-    constructor(comments: Comment[], pages: PagesList) {
+    constructor(comments: Comment[]) {
         this.comments = comments;
-        this.pages = pages;
     }
     
     addComment(pageName: string, text: string, time: number, user: string): Comment {
@@ -28,12 +24,6 @@ export class Comments {
         id: this.commentCount,
         replyTo: null,
       });
-      this.pages[pageName] = {
-        pageName: this.pages[pageName].pageName,
-        title: this.pages[pageName].title,
-        text: this.pages[pageName].text,
-        comments: [...this.pages[pageName].comments],
-      };
       this.commentCount++;
       return this.comments[this.comments.length - 1];
     }
@@ -66,4 +56,11 @@ export class Comments {
     getPageComments(pageName: string): Comment[] {
       return this.comments.filter((comment) => comment.page === pageName);
     }
+
+    public getUserComments(login: string): Comment[] {
+      let cutComments = this.comments.filter((comment) => comment.author === login);
+
+      return cutComments;
+    }
+
   }
