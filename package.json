@@ -7,6 +7,9 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+    "dev": "vite build --sourcemap inline --watch & vite preview",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "jest"
   },
   "devDependencies": {
