@@ -1,43 +1,29 @@
-import { Comment } from "./comments";
-
 export type Page = {
     pageName: string; 
     title: string; 
     text: string;
-    comments: Comment[];
 };
 
-export type PagePreview = {
-    pageName: string; 
-    title: string; 
-    text: string;
-};
+// PagePreview has different text content (limited)
+export type PagePreview = Page;
 
 export type PagesList = {
   [pageName: string]: Page
 }
-
-
 export class Pages {
-  private comments: Comment[];
+  constructor(
+    private pages: PagesList,
+  ) { }
 
+  /**
+   * Return readonly pages list
+   */
   public getPages(): PagesList {
     return {...this.pages};
   }
-  
-  constructor(
-    private pages: PagesList,
-    comments: Comment[],
-  ) {
-    this.comments = comments;
-  }
-
-  public updatePageComments(pageName: string, comment: Comment[]) {
-    this.pages[pageName].comments = comment;
-  }
 
   public createPage(pageName: string, title: string, text: string): Page {
-    return (this.pages[pageName] = { pageName, title, text, comments: [] });
+    return (this.pages[pageName] = { pageName, title, text, });
   }
 
   public removePage(pageName: string): boolean {
@@ -76,5 +62,4 @@ export class Pages {
     return listOfPreviews;
   }
 }
-export { Comment };
 
