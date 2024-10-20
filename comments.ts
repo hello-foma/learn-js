@@ -7,8 +7,9 @@ export type Comment = {
     replyTo: number | null;
 };
 
+
 export class Comments {
-    private comments: Comment[];
+    public comments: Comment[];
     private commentCount = 0;
 
     constructor(comments: Comment[]) {

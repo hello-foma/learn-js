@@ -4,7 +4,7 @@ describe('pages.ts', () => {
     let pages: Pages;
 
     beforeEach(() => {
-        pages = new Pages({}, []);
+        pages = new Pages({});
     });
 
     describe('getPages', () => {
@@ -17,11 +17,10 @@ describe('pages.ts', () => {
         // set pages
         const expectedPages: PagesList = {'testPage': {
             title: 'Test page title',
-             comments: [],
               pageName: 'testPage',
               text: 'Text page content'
             }}
-        let pages = new Pages(expectedPages, []);
+        let pages = new Pages(expectedPages);
         
 
         expect(pages.getPages()).toEqual(expectedPages);
@@ -30,7 +29,7 @@ describe('pages.ts', () => {
         test('Returned pages should be protected from edit', () => {
         // set pages
         const pagesList: PagesList = {};
-        let pages = new Pages(pagesList, []);
+        let pages = new Pages(pagesList);
 
         const pagesToUpdate = pages.getPages();
         pagesToUpdate['newPage'] = {} as Page;
@@ -49,11 +48,10 @@ describe('pages.ts', () => {
         // set pages
         const pageToDelete: PagesList = {'testPage': {
             title: 'Test page title',
-             comments: [],
               pageName: 'testPage',
               text: 'Text page content'
             }}
-        let pages = new Pages(pageToDelete, []);
+        let pages = new Pages(pageToDelete);
         
         expect(pages.removePage('testPage')).toBe(true);
         expect(() => pages.readPage('testPage')).toThrow();
@@ -63,15 +61,13 @@ describe('pages.ts', () => {
         // set pages
         const pageToRead: PagesList = {'testPage': {
             title: 'Test page title',
-             comments: [],
               pageName: 'testPage',
               text: 'Text page content'
             }}
-        let pages = new Pages(pageToRead, []);
+        let pages = new Pages(pageToRead);
         
         expect(pages.readPage('testPage')).toEqual({
                 title: 'Test page title',
-                comments: [],
                 pageName: 'testPage',
                 text: 'Text page content'
                 }
@@ -81,11 +77,10 @@ describe('pages.ts', () => {
 
     test('Should return new page with given properties', () => {
 
-        let pages = new Pages({}, []);
+        let pages = new Pages({});
         
         expect(pages.createPage('testPage', 'Test page title', 'Text page content')).toEqual({
                 title: 'Test page title',
-                comments: [],
                 pageName: 'testPage',
                 text: 'Text page content'
                 }
@@ -97,15 +92,13 @@ describe('pages.ts', () => {
         // set pages
         const pageToUpdate: PagesList = {'testPage': {
             title: 'Test page title',
-             comments: [],
               pageName: 'testPage',
               text: 'Text page content'
             }}
-        let pages = new Pages(pageToUpdate, []);
+        let pages = new Pages(pageToUpdate);
         
         expect(pages.editPage('testPage', 'New Test page title', 'New Text page content')).toEqual({
                 title: 'New Test page title',
-                comments: [],
                 pageName: 'testPage',
                 text: 'New Text page content'
                 }
@@ -120,18 +113,16 @@ describe('pages.ts', () => {
         const existedPages: PagesList = {
             'testPage': {
                 title: 'Test page title',
-                comments: [],
                 pageName: 'testPage',
                 text: '111111111111111000'
             },
             'testPage2': {
                 title: 'Test page title 2',
-                comments: [],
                 pageName: 'testPage2',
                 text: '222222222222222000'
             }
         }
-        let pages = new Pages(existedPages, []);
+        let pages = new Pages(existedPages);
         
         expect(pages.listPages()).toEqual([{
                 title: 'Test page title',

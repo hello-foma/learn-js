@@ -6,7 +6,7 @@ export type User = {
     } 
 
 export type UsersList = {
-    [login: string]: User
+    [login: string]: User | undefined
     }
 
 
@@ -30,6 +30,10 @@ export class Users {
       } else {
         return "User undefined";
       }
+    }
+
+    isUserExists(login: string): boolean {
+      return typeof this.users[login] === 'object' && this.users[login] !== null;
     }
   
     getUserName (login: string): string {

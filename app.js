@@ -111,7 +111,7 @@ export function App() {
         return this.comments.reply(commentId, time, user, text)
     };
   };
-
+    
   App.actions = {
     createPage: "createPage",
     deletePage: "deletePage",
@@ -119,4 +119,3 @@ export function App() {
     editPage: "editPage",
     addComment: "addComment",
   };
-    

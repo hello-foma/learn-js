@@ -5,12 +5,11 @@ import  {Comments, Comment} from './comments.ts'
 import {Authorisation} from './authorisation.ts'
 
 export class App {
-
     public pages: PagesList = {};
     public comments: Comment[]  = [];
 
     private users = new Users(usersExisted);
-    private pagesService = new Pages(this.pages);
+    public pagesService = new Pages(this.pages);
     private commentsService = new Comments(this.comments);
     private auth = new Authorisation(usersExisted);
 
@@ -21,7 +20,6 @@ export class App {
         editPage: "editPage",
         addComment: "addComment",
     };
-
   
     getPageContent(pageName: string) {
       return `${pageName} content.`;
@@ -46,8 +44,9 @@ export class App {
       this.users.createUser(login, userName, role);
     }
     banUser (login: string): string {
-        if (this.users[login]) {
-          this.users[login] = { role: "banned", name: this.users[login].name };
+        if (this.users.isUserExists(login)) {
+          this.users.banUser(login);
+          
           let cutComments = this.commentsService.getUserComments(login);
           let cutCommentsId = cutComments.map(i => i.id); 
           for (let cutCommentId of cutCommentsId) {
@@ -94,5 +93,6 @@ export class App {
         return this.commentsService.reply(commentId, time, user, text)
     };
   };
+
 
 

@@ -16,16 +16,32 @@ export class Authorisation {
      * If there is no such user, return false
      */
     login (userName: string): boolean {
-      if (this.users !== null) {
-        const existedUser = this.users[userName];
-        if (existedUser) {
-        this.currentUser = existedUser;
-        return true;
-        } 
-      } 
+      if (this.users === null) {
         this.currentUser = null;
         return false;
+      }
+
+      const existedUser = this.users[userName];
+      if (existedUser) {
+        this.currentUser = existedUser;
+        return true;
+      } else {
+        this.currentUser = null;
+        return false;
+      }
     };
+
+    // login (userName: string): boolean {
+    //   if (this.users !== null) {
+    //     const existedUser: User = this.users[userName];
+    //     if (existedUser) {
+    //       this.currentUser = existedUser;
+    //       return true;
+    //     } 
+    //   } 
+    //     this.currentUser = null;
+    //     return false;
+    // };
   
     /**
      * TODO: logout()
