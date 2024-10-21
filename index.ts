@@ -109,20 +109,24 @@ import { Page, Pages } from './pages.ts';
       const userLogin = getLoginInput();
       // if login is not empty
       if (userLogin) {
-      setUsername(userLogin);
+        if (app.login(userLogin)) {
+          setUsername(userLogin);
 
-      resetInputState();
-
-      // hide login page
-      toggleIfExist(loginLinkElem, false);
-      toggleIfExist(loginInputElem, false);
-      toggleIfExist(loginButtonElem, false);
-
-      //show username
-      toggleIfExist(usernameElem, true)
-
-      // show logout
-      toggleIfExist(logoutLinkElem, true);
+          resetInputState();
+    
+          // hide login page
+          toggleIfExist(loginLinkElem, false);
+          toggleIfExist(loginInputElem, false);
+          toggleIfExist(loginButtonElem, false);
+    
+          //show username
+          toggleIfExist(usernameElem, true)
+    
+          // show logout
+          toggleIfExist(logoutLinkElem, true);
+        } else {
+          toggleIfExist(errorMessageElem, true);
+        }
       } else {
         toggleIfExist(errorMessageElem, true);
       }
@@ -199,4 +203,4 @@ import { Page, Pages } from './pages.ts';
   // init app content
   app.createPage('Home', 'Home page', 'text of home page');
   app.createPage('Griffindor', 'Griffindor page', 'text of griffindor page');
-  updatePageList(app.pagesService.listPages(), navigateToPage);
+  updatePageList(app.listPages(), navigateToPage);
