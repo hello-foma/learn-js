@@ -57,7 +57,7 @@ export class Authorisation {
      * Check is user can perform requested app action
      * If no user authorised, then default role "guest" is applied
      */
-    isHaveAccess (action: string): boolean {
+    isHaveAccess (action: keyof typeof App.actions): boolean {
       if (!App.actions[action]) {
         return false;
       }

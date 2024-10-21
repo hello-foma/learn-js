@@ -1,6 +1,6 @@
 import {Users} from './users.ts'
 import {usersExisted} from './usersExisted.ts'
-import {Pages, PagesList} from './pages.ts'
+import {Pages, PagesList, PagePreview} from './pages.ts'
 import  {Comments, Comment} from './comments.ts'
 import {Authorisation} from './authorisation.ts'
 
@@ -9,7 +9,7 @@ export class App {
     public comments: Comment[]  = [];
 
     private users = new Users(usersExisted);
-    public pagesService = new Pages(this.pages);
+    private pagesService = new Pages(this.pages);
     private commentsService = new Comments(this.comments);
     private auth = new Authorisation(usersExisted);
 
@@ -19,7 +19,7 @@ export class App {
         readPage: "readPage",
         editPage: "editPage",
         addComment: "addComment",
-    };
+    } as const;;
   
     getPageContent(pageName: string) {
       return `${pageName} content.`;
@@ -32,8 +32,8 @@ export class App {
      return "You dont't have an access to this page!";
     };
   
-    login (userName: string): void {
-        this.auth.login(userName);
+    login (userName: string): boolean {
+        return this.auth.login(userName);
     }
    
     logout (): void {
@@ -77,6 +77,10 @@ export class App {
             return {page, comments}
         }
     };
+
+    listPages(): PagePreview[] {
+      return this.pagesService.listPages();
+    }
     
     leaveComment (pageName: string, text: string, time: number, user: string) {
         this.commentsService.addComment(pageName, text, time, user);
