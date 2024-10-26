@@ -5,9 +5,9 @@
 body {
     /* max-width: 1200px; */
     min-width: 600px;
-    height: 100vh;
+    height: fit-content;
+    min-height: 100vh;
     font-size: 20px;
-
 }
 
 header {
@@ -45,7 +45,7 @@ ul {
     padding: 0px;
 }
 
-#pages-link, #login-link, #logout-link, #pages__list, #back-to-pages_List {
+#pages-link, #login-link, #logout-link, #pages__list, #back-to-pages_List, #commentText-button {
     cursor: pointer;
 }
 
@@ -66,7 +66,7 @@ ul {
     margin-bottom: 0px;
 }
 
-input, button, #username, #error-message {
+input, button, #username, #error-message, #user-error-message {
     margin-left: 10px;
 }
 
@@ -77,20 +77,59 @@ input, button, #username, #error-message {
 }
 
 
-#error-message {
+#error-message, #user-error-message {
     color: red;
-    margin-left: 20px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
 #page {
     padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #back-to-pages_List {
     margin-top:40px;
-    padding-left: 10px;
-    position: absolute;
     bottom: 0; 
+}
+
+#commentsArea {
+    margin-top:80px;
+    display: grid;
+    width: 400px;
+    height: fit-content;
+    flex-grow: 1;
+}
+
+#commentText {
+    height: 80px;
+    resize: none;
+    overflow-wrap: break-word;
+}
+
+#commentText-button {
+    margin-top:10px;
+    width: 60px;
+    justify-self: right;
+}
+
+#leftedComments {
+    margin-top:10px;
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word; /* Переносит длинные слова */
+    word-break: break-word; /* Поддержка старых браузеров */
+    white-space: normal; /* Перенос текста на несколько строк */
+}
+
+#leftedComments li {
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    list-style-type: none; 
+    padding: 5px 0;
 }

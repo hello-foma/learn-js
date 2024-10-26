@@ -12,6 +12,7 @@ export class App {
     private pagesService = new Pages(this.pages);
     private commentsService = new Comments(this.comments);
     private auth = new Authorisation(usersExisted);
+    private currentPage: string | null = null;
 
     static actions = {
         createPage: "createPage",
@@ -35,7 +36,11 @@ export class App {
     login (userName: string): boolean {
         return this.auth.login(userName);
     }
-   
+
+    isAuthorized (): boolean {
+      return this.auth.getCurrentUser() !== null;
+    }
+
     logout (): void {
         this.auth.logout();
     }
@@ -81,9 +86,21 @@ export class App {
     listPages(): PagePreview[] {
       return this.pagesService.listPages();
     }
+
+    setCurrentPage(pageName: string) {
+      this.currentPage = pageName;
+      
+    }
     
-    leaveComment (pageName: string, text: string, time: number, user: string) {
-        this.commentsService.addComment(pageName, text, time, user);
+    leaveComment (text: string) {
+      const pageName = this.currentPage;
+      const time = Date.now();
+      const user = this.auth.getCurrentUser();
+      if (user !== null && pageName !== null) {
+        this.commentsService.addComment(pageName, text, time, user.login);
+      } else {
+        throw new Error('User is not authorized to leave a comment!');
+      }
     }
     deleteComment (commentId: number) {
             this.commentsService.deleteComment(commentId);
@@ -96,6 +113,15 @@ export class App {
         }
         return this.commentsService.reply(commentId, time, user, text)
     };
+    getPageComments(): Comment[] {
+      const pageName = this.currentPage;
+
+      if (pageName === null) {
+        return [];
+      }
+      
+      return this.commentsService.getPageComments(pageName)
+    }
   };
 
 

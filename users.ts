@@ -3,6 +3,7 @@ import { RoleName } from "./roles";
 export type User = { 
     name: string;
     role: RoleName;
+    login: string;
     } 
 
 export type UsersList = {
@@ -19,13 +20,13 @@ export class Users {
     }
 
     createUser (login: string, userName: string, role: RoleName): boolean {
-      this.users[login] = { role: role, name: userName };
+      this.users[login] = { role: role, name: userName, login };
       return this.users[login] !== undefined;
     }
   
     updateUser (login: string, userName: string, role: string): User | string {
       if (this.users[login]) {
-        this.users[login] = { role: role, name: userName };
+        this.users[login] = { role, name: userName, login };
         return this.users[login];
       } else {
         return "User undefined";
@@ -42,7 +43,7 @@ export class Users {
   
     banUser (login: string): string {
       if (this.users[login]) {
-        this.users[login] = { role: "banned", name: this.users[login].name };
+        this.users[login] = { role: "banned", name: this.users[login].name, login };
         return login + " was banned";
       } else {
         return "User undefined";

@@ -24,8 +24,9 @@
   
     <div id="login-page">
       <p id="error-message">Введите логин!</p>
+      <p id="user-error-message">Пользователь не найден</p>
       <div id="authorization-form">
-        <input type="text" id="login-input" placeholder="username">
+        <input type="text" id="login-input" placeholder="username"/>
         <button id="login-button">Login</button>
       </div>
     </div>
@@ -38,8 +39,13 @@
   <div id="page">
     <h2 id="page__title"></h2>
     <p id="page__content"></p>
+    <div id="commentsArea">
+      <textarea id="commentText" placeholder="Live a comment"></textarea>
+      <button id="commentText-button">Send</button>
+      <ul id="leftedComments"></ul>
+    </div>
+    <p id="back-to-pages_List">Back to pages</p>
   </div>
-  <p id="back-to-pages_List">Back to pages</p>
 </main>
 <footer>
   
