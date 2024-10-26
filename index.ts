@@ -1,6 +1,7 @@
 import { App } from './app.ts';
 import { ElementId, getElemById, getLoginInput, onClick, setContent, setTitle, setUsername, toggleElem, updatePageList } from './dom.ts';
 import { Page, Pages } from './pages.ts';
+import { getCommentInputText, updateComments } from './dom.ts';
   
   const app = new App();
 
@@ -38,6 +39,10 @@ import { Page, Pages } from './pages.ts';
   const backToPagesListElem = getElemById(ElementId.backToPagesList);
   const pageTitleElem = getElemById(ElementId.pageTitle);
   const pageContentElem = getElemById(ElementId.pageContent);
+  const commentsAreaElem = getElemById(ElementId.commentsArea);
+  const userErrorMessageElem = getElemById(ElementId.userErrorMessage);
+
+
 
   toggleIfExist(loginInputElem, false);
   toggleIfExist(loginButtonElem, false);
@@ -48,7 +53,9 @@ import { Page, Pages } from './pages.ts';
   toggleIfExist(pagesListElem, false);
   toggleIfExist(backToPagesListElem, false);
   toggleIfExist(pageTitleElem, true);
-  toggleIfExist(pageContentElem, true);
+  toggleIfExist(commentsAreaElem, false);
+  toggleIfExist(userErrorMessageElem , false);
+
 
 
   const navigate = (page: string): void => {
@@ -118,6 +125,7 @@ import { Page, Pages } from './pages.ts';
           toggleIfExist(loginLinkElem, false);
           toggleIfExist(loginInputElem, false);
           toggleIfExist(loginButtonElem, false);
+          toggleIfExist(userErrorMessageElem , false)
     
           //show username
           toggleIfExist(usernameElem, true)
@@ -125,10 +133,13 @@ import { Page, Pages } from './pages.ts';
           // show logout
           toggleIfExist(logoutLinkElem, true);
         } else {
-          toggleIfExist(errorMessageElem, true);
+          // @TODO: добавить стили
+          toggleIfExist(userErrorMessageElem , true);
+          toggleIfExist(errorMessageElem, false);
         }
       } else {
         toggleIfExist(errorMessageElem, true);
+        toggleIfExist(userErrorMessageElem , false);
       }
     })
 
@@ -155,26 +166,30 @@ import { Page, Pages } from './pages.ts';
       toggleIfExist(pageTitleElem, false);
       toggleIfExist(pageContentElem, false);
       toggleIfExist(backToPagesListElem, false);
+      toggleIfExist(commentsAreaElem, false);
     })
 
     onClick(ElementId.backToPagesList, () => {
         toggleIfExist(backToPagesListElem, false);
         toggleIfExist(pageTitleElem, false);
         toggleIfExist(pageContentElem, false);
+        toggleIfExist(commentsAreaElem, false);
 
         toggleIfExist(pagesListElem, true);
 
 
       // goToPageList();
     })
-
-  }
+    onClick(ElementId.commentTextButton, () => {
+      const commentText = getCommentInputText();
+      
+      app.leaveComment(commentText);
+      const pageComments = app.getPageComments();
+      updateComments(pageComments);
+  })
+};
 
   const navigateToPage = (pageName: string): void => {
-    // todo: implement navigation
-
-    console.log(pageName);
-   
     const pageData = app.readPage(pageName);
     if (typeof pageData !== 'string') {
         const page = pageData.page;
@@ -182,12 +197,16 @@ import { Page, Pages } from './pages.ts';
         // Обновляем заголовок и контент страницы
         setTitle(page.title);   // Функция для установки заголовка
         setContent(page.text);  // Функция для установки текста страницы
+        app.setCurrentPage(pageName);
 
         // Переход к отображению страницы
         navigate(NavigationPage.page);
         toggleIfExist(pageTitleElem, true);
         toggleIfExist(pageContentElem, true);
         toggleIfExist(backToPagesListElem, true);
+        if (app.isAuthorized()) {
+        toggleIfExist(commentsAreaElem, true);
+        }
     } else {
         console.error('Страница не найдена:', pageName);
     }

@@ -1,4 +1,5 @@
 import {PagePreview} from "./pages";
+import { Comment } from "./comments";
 
 export const ElementId = {
     menu: 'menu',
@@ -16,6 +17,11 @@ export const ElementId = {
     pageContent: 'page__content',
     errorMessage: 'error-message',
     backToPagesList: 'back-to-pages_List',
+    commentText: 'commentText',
+    commentTextButton: 'commentText-button',
+    commentsArea: 'commentsArea',
+    userErrorMessage: 'user-error-message',
+    leftedComments: 'leftedComments'
 };
 
 
@@ -61,6 +67,12 @@ export const getLoginInput = (): string => {
     return loginInputElem.value;
 }
 
+export const getCommentInputText = (): string => {
+    const loginInputElem = getElemById(ElementId.commentText) as HTMLInputElement;
+
+    return loginInputElem.value;
+}
+
 export const setTitle = (text: string): void => {
     const titleElem = getElemById(ElementId.pageTitle) as HTMLElement;
 
@@ -90,6 +102,25 @@ export const updatePageList = (pages: PagePreview[], goToPage: (pageName: string
         liElem.addEventListener('click', () => {
             goToPage(page.pageName);
         });
+
+        listElem.appendChild(liElem);
+    });
+};
+
+export const updateComments = (comments: Comment[]): void => {
+    // if we run in node.js
+    if (typeof document !== 'object') {
+        return;
+    }
+    
+    const listElem = getElemById(ElementId.leftedComments) as HTMLElement;
+
+    listElem.innerHTML = '';
+
+    comments.forEach(comment => {
+        const liElem = document.createElement('li');
+
+        liElem.innerText = comment.author + ': ' + comment.text;
 
         listElem.appendChild(liElem);
     });
